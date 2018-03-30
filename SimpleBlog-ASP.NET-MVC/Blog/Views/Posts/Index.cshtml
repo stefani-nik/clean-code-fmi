@@ -1,0 +1,153 @@
+﻿@using System.Activities.Expressions
+@using System.Web.UI.WebControls
+@using Blog.Models
+@using Microsoft.AspNet.Identity
+@model PagedList.IPagedList<Blog.Models.Post>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<p class="page-title">All Posts</p>
+
+@if (TempData["changePost"] != null ||
+                TempData["deletePost"] != null ||
+                TempData["createPost"] != null)
+{
+    <div class="alert-success" id="show">
+        <strong>@TempData["changePost"]</strong>
+        <strong>@TempData["deletePost"]</strong>
+        <strong>@TempData["createPost"]</strong>
+    </div>
+}
+
+@if (TempData["wrongIdPost"] != null)
+{
+    <div class="alert-danger" id="show">
+        <strong>@TempData["wrongIdPost"]</strong>
+    </div>
+}
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Posts", FormMethod.Get, htmlAttributes: new { @class = "form-inline" }))
+{
+    <div class="search-box">
+        <p>
+            Search by category: @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+            <input type="submit" value="Search" class="btn btn-blue btn-effect" style="width: 70px; height: 40px; padding: 0px 0px 0px 0px; border-radius: 5px;">
+        </p>
+    </div>
+   
+}
+<br/> <br/>
+
+@if (ViewBag.NoMatch != null || TempData["wrongId"] != null)
+{
+    <p class="no-match">@TempData["wrongId"]</p>
+    <p class="no-match">@ViewBag.NoMatch</p>
+}
+else
+{
+
+    foreach (var item in Model)
+    {
+        <div class="post-container-@item.CategoryId">
+
+                <div class="post-title">
+                    @Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayFor(modelItem => item.Title).ToString()),
+            "Details", new { id = item.PostId })
+                </div>
+
+                <div class="post-about">
+                    @Html.DisplayFor(modelItem => item.About)
+                </div>
+                <div class="post-content">
+                    @Html.DisplayFor(modelItem => item.Content)
+                </div>
+                <div class="post-date">
+                    <p>Posted on @Html.DisplayFor(modelItem => item.DatePosted) by @Html.DisplayFor(modelItem => item.User.Username) </p>
+                </div>
+            </div>
+        <br/>
+        <br/>
+
+        <div class="post-category">
+            Category:   
+            <div class="btn-category"> @Html.ActionLink(item.Category.Content, "Category", "Posts", new {categoryId = item.CategoryId},null) </div>
+        </div>
+       
+        <div class="post-tags">
+            <p class="post-category">
+                Tags:
+                @foreach (var tag in item.Tag)
+                {
+                    <div class="btn-tag">
+                        #@Html.DisplayFor(modelItem => tag.TagName)
+                    </div>
+                }
+            </p>
+        </div>
+        <br/>
+        <div class="post-buttons">
+            <div class="btn btn-blue btn-effect">
+                @Html.ActionLink("Details", "Details", new { id = item.PostId })
+            </div>
+            @if (@HttpUtility.HtmlDecode(User.Identity.Name) ==
+                     @Html.DisplayFor(model => item.User.Username).ToString())
+            {
+                <div class="btn btn-blue btn-effect">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.PostId })
+                </div>
+                <div class="btn btn-blue btn-effect">
+                    @Html.ActionLink("Delete", "Delete", new { id = item.PostId })
+                </div>
+            }
+
+        </div>
+        <div class="comments-container">
+            <span class="comments-heading">Comments:</span>
+            <ul id="comments-list" class="comments-list">
+                @foreach (var comment in item.Comment)
+                {
+                    <li>
+                        <div class="comment-main-level">
+
+                            <div class="comment-box">
+                                <div class="comment-head">
+                                    <h6 class="comment-name by-author" style="color: white">@Html.DisplayFor(modelItem => comment.User.Username)</h6>
+                                    <span>@Html.DisplayFor(modelItem => comment.DatePublished)</span>
+
+                                </div>
+                                <div class="comment-content">
+                                    @Html.DisplayFor(modelItem => comment.Content)
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="post-button-comment btn btn-blue btn-effect">
+            @Html.ActionLink("Comment", "Comment", new { postId = item.PostId }, new { userId = HttpContext.Current.User.Identity.GetUserId() })
+        </div>
+
+        <br />
+        <br />
+        <br />
+
+
+    }
+}
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+       new { page, sortOrder = ViewBag.CurrentFilter }))
+

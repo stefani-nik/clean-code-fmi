@@ -1,0 +1,63 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (TempData["successLogin"] != null ||
+                             TempData["changePass"] != null ||
+                             TempData["deleteProfil"] != null ||
+                             TempData["toLoginAllert"] != null)
+{
+    <div class="alert-box">
+        <div class="alert-success">
+            <strong>@TempData["successLogin"]</strong>
+            <strong>@TempData["changePass"]</strong>
+            <strong>@TempData["deleteProfil"]</strong>
+        </div>
+        <div class="alert-info">
+            <strong>@TempData["toLoginAllert"]</strong>
+        </div>
+    </div>
+}
+<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+
+<div class="jumbotron">
+    <h1 class="home-header">BLOGSTER</h1>
+    <p class="home-header-small">Share your thoughts.</p>
+    <p><a href="https://www.facebook.com/9gag/" class="btn btn-primary btn-lg">Follow us on Facebook &raquo;</a>
+    </p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>How did we create it:</h2>
+        <p>
+            The project contains a simple register, login and logout form with the popular crypt: "Simple Crypto"
+            in details - PBKDF2 algorithm. Every user can make posts and comments in different categories. You can atach
+            a tag to the post for simple search. If you like our page go to the contact page to find us and the source code
+            in GitHub. Enjoy!
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>What is the aim of our site:</h2>
+        <p>
+            This is a web platform aiming to encourage you to share your knowladge and thoughts.
+            As long as you are registered you can see the post of the other users and you can also create your own posts.
+            We hope that the site is enterntaing and interesting. Thank you for using our Blogster!
+        </p>
+    </div>
+    <div class="col-md-4">
+        <h2>Find us:</h2>
+        <p>
+            <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fnikolay.rogchev&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80"
+                    scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>                                                                                                                   
+        </p>
+        <p>
+            <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fdeostefanow&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:80px;" allowTransparency="true"></iframe>
+        </p>
+        <p>
+            <iframe src="//www.facebook.com/plugins/follow?href=https%3A%2F%2Fwww.facebook.com%2Fstefani.nikolova.0904&amp;layout=standard&amp;show_faces=true&amp;colorscheme=light&amp;width=450&amp;height=80"
+                    scrolling="no" frameborder="0" style="border: none; overflow: hidden;
+                                                                                                                                                                                                                                                                                                                     width: 450px; height: 80px;" allowTransparency="true"></iframe>
+        </p>
+    </div>
+</div>

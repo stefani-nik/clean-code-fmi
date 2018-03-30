@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BlogDataModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="PostId" Type="int" />
+          <Property Name="Content" Type="ntext" Nullable="false" />
+          <Property Name="DatePublished" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="80" Nullable="false" />
+          <Property Name="About" Type="nvarchar" MaxLength="150" />
+          <Property Name="Content" Type="ntext" Nullable="false" />
+          <Property Name="DatePosted" Type="datetime" Nullable="false" />
+          <Property Name="CategoryId" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'C:\USERS\USER\DESKTOP\TEAMPROJECT\BLOG\BLOG\APP_DATA\BLOGDATA.MDF.dbo.PostTag' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PostTag">
+          <Key>
+            <PropertyRef Name="PostId" />
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="TagId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TagName" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PasswordSalt" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Comment_ToPost">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_ToCategory">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Table_ToPost">
+          <End Role="Post" Type="Self.Post" Multiplicity="1" />
+          <End Role="PostTag" Type="Self.PostTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="PostTag">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Table_ToTag">
+          <End Role="Tag" Type="Self.Tag" Multiplicity="1" />
+          <End Role="PostTag" Type="Self.PostTag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="TagId" />
+            </Principal>
+            <Dependent Role="PostTag">
+              <PropertyRef Name="TagId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BlogDataModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Post" EntityType="Self.Post" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PostTag" EntityType="Self.PostTag" store:Type="Tables" Schema="dbo">
+          </EntitySet>
+          <AssociationSet Name="FK_Comment_ToPost" Association="Self.FK_Comment_ToPost">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_ToUser" Association="Self.FK_Comment_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Comment" EntitySet="Comment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_ToCategory" Association="Self.FK_Post_ToCategory">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_ToUser" Association="Self.FK_Post_ToUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Post" EntitySet="Post" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_ToPost" Association="Self.FK_Table_ToPost">
+            <End Role="Post" EntitySet="Post" />
+            <End Role="PostTag" EntitySet="PostTag" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Table_ToTag" Association="Self.FK_Table_ToTag">
+            <End Role="Tag" EntitySet="Tag" />
+            <End Role="PostTag" EntitySet="PostTag" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BlogDataModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Post_ToCategory" FromRole="Category" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="PostId" Type="Int32" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DatePublished" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Comment_ToPost" FromRole="Comment" ToRole="Post" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Comment_ToUser" FromRole="Comment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Post">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="About" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DatePosted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CategoryId" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Post_ToCategory" FromRole="Post" ToRole="Category" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_Comment_ToPost" FromRole="Post" ToRole="Comment" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Post_ToUser" FromRole="Post" ToRole="User" />
+          <NavigationProperty Name="Tag" Relationship="Self.PostTag" FromRole="Post" ToRole="Tag" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TagName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Post" Relationship="Self.PostTag" FromRole="Tag" ToRole="Post" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordSalt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Comment" Relationship="Self.FK_Comment_ToUser" FromRole="User" ToRole="Comment" />
+          <NavigationProperty Name="Post" Relationship="Self.FK_Post_ToUser" FromRole="User" ToRole="Post" />
+        </EntityType>
+        <Association Name="FK_Post_ToCategory">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_ToPost">
+          <End Role="Post" Type="Self.Post" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Post">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Post_ToUser">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Post">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PostTag">
+          <End Role="Post" Type="Self.Post" Multiplicity="*" />
+          <End Role="Tag" Type="Self.Tag" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="BlogDataEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Posts" EntityType="Self.Post" />
+          <EntitySet Name="Tags" EntityType="Self.Tag" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Post_ToCategory" Association="Self.FK_Post_ToCategory">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_ToPost" Association="Self.FK_Comment_ToPost">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_ToUser" Association="Self.FK_Comment_ToUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Post_ToUser" Association="Self.FK_Post_ToUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Post" EntitySet="Posts" />
+          </AssociationSet>
+          <AssociationSet Name="PostTag" Association="Self.PostTag">
+            <End Role="Post" EntitySet="Posts" />
+            <End Role="Tag" EntitySet="Tags" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BlogDataModelStoreContainer" CdmEntityContainer="BlogDataEntities3">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="BlogDataModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="BlogDataModel.Comment">
+              <MappingFragment StoreEntitySet="Comment">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="DatePublished" ColumnName="DatePublished" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="BlogDataModel.Post">
+              <MappingFragment StoreEntitySet="Post">
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="About" ColumnName="About" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="DatePosted" ColumnName="DatePosted" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tags">
+            <EntityTypeMapping TypeName="BlogDataModel.Tag">
+              <MappingFragment StoreEntitySet="Tag">
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+                <ScalarProperty Name="TagName" ColumnName="TagName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BlogDataModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PasswordSalt" ColumnName="PasswordSalt" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="PostTag" TypeName="BlogDataModel.PostTag" StoreEntitySet="PostTag">
+            <EndProperty Name="Post">
+              <ScalarProperty Name="PostId" ColumnName="PostId" />
+            </EndProperty>
+            <EndProperty Name="Tag">
+              <ScalarProperty Name="TagId" ColumnName="TagId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
