@@ -1,5 +1,6 @@
-# Bookster 
+# clean-code-fmi
 
-## This is a simple blog created with ASP.NET MVC
+This repository has two different projects
 
-![alt tag](https://user-images.githubusercontent.com/19571233/38130588-5ad5ed4e-340c-11e8-8017-06019c7cbd4f.PNG)
+## Snake Game by Kamen Petrov 
+## Blogster by Stefani Nikolova
