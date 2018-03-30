@@ -1,0 +1,28 @@
+﻿@model Blog.Models.Category
+@{
+    ViewBag.Title = "AllCategories";
+}
+<link href='http://fonts.googleapis.com/css?family=Didact+Gothic' rel='stylesheet' type='text/css'>
+
+<p class="page-title">All Categories</p>
+
+<div class="wrap">
+<div class="box box1 shadow1">
+    <h3> @Html.ActionLink("Fun","Category","Posts", new { categoryId = 1}, null) </h3>
+</div>
+<div class="box box2 shadow2">
+    <h3>@Html.ActionLink("Science", "Category", "Posts", new { categoryId = 2 }, null)</h3>
+</div>
+<div class="box box3 shadow3">
+    <h3> @Html.ActionLink("Programming", "Category", "Posts", new { categoryId = 5 }, null)</h3>
+</div>
+<div class="box box4 shadow4">
+    <h3>@Html.ActionLink("Sport", "Category", "Posts", new { categoryId = 6 }, null)</h3>
+</div>
+<div class="box box5 shadow5">
+    <h3>@Html.ActionLink("Places", "Category", "Posts", new { categoryId = 4 }, null)</h3>
+</div>
+<div class="box box6 shadow6">
+    <h3>@Html.ActionLink("Other", "Category", "Posts", new { categoryId = 7 }, null)</h3>
+</div>
+</div>

@@ -1,0 +1,96 @@
+﻿@model Blog.Models.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4 class="user-details" style="color: rgba(0, 158, 227, 0.78);">User - @Html.DisplayFor(model => model.Username)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+           Date Created
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt>
+            Posts Count
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Post.Count)
+        </dd>
+        <dt>
+           Comments Count
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Count)
+        </dd>
+    </dl>
+    @if (@HttpUtility.HtmlDecode(User.Identity.Name) ==
+             @Html.DisplayFor(model => model.Username).ToString())
+    {
+        <p>You can edit your profil here:</p>
+        <hr />
+       <fieldset>
+        <legend style="color: blue">Change password</legend>
+    @using (Ajax.BeginForm("Details", "User", new AjaxOptions { UpdateTargetId = "divInfo" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.Username)
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("New password: ", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="password" name="newPassword" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("New password confirm: ", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="password" name="newConfirmPassword" class="form-control" />
+                </div>
+            </div>
+        
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Change" class="btn btn-blue btn-effect" />
+                    </div>
+                </div>
+            </div>
+    }
+        </fieldset>
+
+        <hr />
+        <a href="~/User/Delete/@Model.UserId.ToString()"><h3 style="color: red; text-decoration: none ">Delete profile</h3></a>
+        <hr />
+    }
+    </div>
+<p class="post-button-comment btn btn-blue btn-effect">
+    @Html.ActionLink("Back to User list", "Index")
+</p>

@@ -1,0 +1,121 @@
+﻿@using Blog.Models
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../../Content/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <title>@ViewBag.Title - Blog Software University</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/Scripts/message.js")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img src="../../img/logo.png" style="width: 50px; height: 50px" />
+                @Html.ActionLink("BLOGSTER", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("About us", "About", "Home")</li>
+                    <li>@Html.ActionLink("Users", "Index", "User")</li>
+
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts<span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-column columns-2">
+
+                            <div class="col-sm-6">
+                                <ul class="multi-column-dropdown" role="menu">
+                                    <li>@Html.ActionLink("All posts", "Index", "Posts") </li>
+                                    <li>@Html.ActionLink("Recent posts", "RecentPosts", "Posts")</li>
+                                    <li>@Html.ActionLink("Create post", "Create", "Posts")</li>
+                                    <li>@Html.ActionLink("Gallery", "Gallery", "Posts")</li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6">
+                                <ul class="multi-column-dropdown" role="menu">
+
+                                    <li>@Html.ActionLink("All categories", "AllCategories", "Posts") </li>
+                                    <li>@Html.ActionLink("Fun", "Category", "Posts", new { categoryId = 1 }, null)</li>
+                                    <li>@Html.ActionLink("Science", "Category", "Posts", new { categoryId = 2 }, null)</li>
+                                    <li>@Html.ActionLink("Programming", "Category", "Posts", new { categoryId = 5 }, null)</li>
+                                    <li>@Html.ActionLink("Places", "Category", "Posts", new { categoryId = 4 }, null)</li>
+                                    <li>@Html.ActionLink("Sport", "Category", "Posts", new { categoryId = 6 }, null)</li>
+                                    <li>@Html.ActionLink("Others", "Category", "Posts", new { categoryId = 7 }, null)</li>
+                                </ul>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <li>@Html.ActionLink("Tutorials", "Tutorials", "Home")</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        var db = new BlogDataEntities();
+                        var userName = User.Identity.Name;
+                        var user = db.User.FirstOrDefault(u => u.Username == userName);
+                            <li class="tabulance-log-in">
+                              @Html.ActionLink("Hello, " + @HttpUtility.HtmlDecode(User.Identity.Name), "Details", "User", new { id = user.UserId }, null)
+                            </li>
+                        <li>@Html.ActionLink("Log out", "Logout", "User")</li>
+                      
+                    }
+                    else
+                    {
+                        <li class="tabulance-log-in">@Html.ActionLink("Log in", "Login", "User")</li>
+                        <li>@Html.ActionLink("Register", "Register", "User")</li>
+                    }
+
+                    </ul>
+                </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+    <footer class="page-footer">
+        <div class="col-lg-4">
+            <h3>
+                <b>Send Us A Message:</b>
+            </h3>
+            <h3>blogster@blogster.com</h3>
+            <br>
+        </div>
+
+        <div class="col-lg-4">
+            <h3>
+                <b>Call Us:</b>
+            </h3>
+            <h3>+55 3984-4389</h3>
+            <br>
+        </div>
+
+        <div class="col-lg-4">
+            <h3> &copy; @DateTime.Now.Year - Blog Software University</h3>
+
+            <div id="google_translate_element"></div>
+            <script type="text/javascript">
+                function googleTranslateElementInit() {
+                    new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'de,en' }, 'google_translate_element');
+                }
+            </script>
+            <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        </div>
+    </footer>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

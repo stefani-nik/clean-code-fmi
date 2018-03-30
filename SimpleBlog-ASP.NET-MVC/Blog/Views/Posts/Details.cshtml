@@ -1,0 +1,76 @@
+﻿@model Blog.Models.Post
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<p class="page-title">Details</p>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.About)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.About)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+
+        <dt>
+            Date Posted
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DatePosted)
+        </dd>
+
+        <dt>
+           Category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Content)
+        </dd>
+
+        <dt>
+           Author
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Username)
+        </dd>
+        <dt>
+            Comments Count
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment.Count)
+        </dd>
+
+    </dl>
+</div>
+<p>
+   @if (@HttpUtility.HtmlDecode(User.Identity.Name) ==
+                                      @Html.DisplayFor(model => model.User.Username).ToString())
+   {
+    <a href="../Edit/@Model.PostId.ToString()" class="btn btn-blue btn-effect" role="button">Edit Post</a>
+    <a href="../Delete/@Model.PostId.ToString()" class="btn btn-blue btn-effect" role="button">Delete Post</a>
+   }
+</p>

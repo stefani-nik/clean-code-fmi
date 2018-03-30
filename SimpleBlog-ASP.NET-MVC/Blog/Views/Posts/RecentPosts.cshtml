@@ -1,0 +1,104 @@
+﻿@using System.Activities.Expressions
+@using System.Web.UI.WebControls
+@using Blog.Models
+@using Microsoft.AspNet.Identity
+@model IEnumerable<Blog.Models.Post>
+@{
+    ViewBag.Title = "RecentPosts";
+}
+
+<p class="page-title">Recent Post</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@foreach (var item in Model)
+{
+    <div class="post-container-@item.CategoryId">
+
+        <div class="post-title">
+            @Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayFor(modelItem => item.Title).ToString()),
+            "Details", new { id = item.PostId })
+        </div>
+
+        <div class="post-about">
+            @Html.DisplayFor(modelItem => item.About)
+        </div>
+        <div class="post-content">
+            @Html.DisplayFor(modelItem => item.Content)
+        </div>
+        <div class="post-date">
+            <p>Posted on @Html.DisplayFor(modelItem => item.DatePosted) by @Html.DisplayFor(modelItem => item.User.Username) </p>
+        </div>
+    </div>
+            <br />
+            <br />
+
+            <div class="post-category">
+                <h3>Category: </h3>
+                <div class="btn-category"> @Html.ActionLink(item.Category.Content, "Category", "Posts", new { categoryId = item.CategoryId }, null) </div>
+            </div>
+
+            <div class="post-tags">
+                <p class="post-category">
+                    <h3>Tags: </h3>
+                    @foreach (var tag in item.Tag)
+                {
+                        <div class="btn-tag">
+                            #@Html.DisplayFor(modelItem => tag.TagName)
+                        </div>
+                    }
+                </p>
+            </div>
+            <br />
+            <div class="post-buttons">
+                <div class="btn btn-blue btn-effect">
+                    @Html.ActionLink("Details", "Details", new { id = item.PostId })
+                </div>
+                @if (@HttpUtility.HtmlDecode(User.Identity.Name) ==
+             @Html.DisplayFor(model => item.User.Username).ToString())
+                {
+                    <div class="btn btn-blue btn-effect">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PostId })
+                    </div>
+                    <div class="btn btn-blue btn-effect">
+                        @Html.ActionLink("Delete", "Delete", new { id = item.PostId })
+                    </div>
+                }
+
+            </div>
+            <div class="comments-container">
+                <span class="comments-heading">Comments:</span>
+                <ul id="comments-list" class="comments-list">
+                    @foreach (var comment in item.Comment)
+                {
+                        <li>
+                            <div class="comment-main-level">
+
+                                <div class="comment-box">
+                                    <div class="comment-head">
+                                        <h6 class="comment-name by-author"  style="color: white">@Html.DisplayFor(modelItem => comment.User.Username)</h6>
+                                        <span>@Html.DisplayFor(modelItem => comment.DatePublished)</span>
+
+                                    </div>
+                                    <div class="comment-content">
+                                        @Html.DisplayFor(modelItem => comment.Content)
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="post-button-comment btn btn-blue btn-effect">
+                @Html.ActionLink("Comment", "Comment", new { postId = item.PostId }, new { userId = HttpContext.Current.User.Identity.GetUserId() })
+            </div>
+
+            <br />
+            <br />
+            <br />
+
+}
+

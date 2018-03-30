@@ -1,0 +1,72 @@
+﻿@model PagedList.IPagedList<Blog.Models.User>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "User";
+}
+
+<p class="page-title">View all users</p>
+
+@using (Html.BeginForm("Index", "User", FormMethod.Get))
+{
+    <div class="search-box">
+        <p>
+            Find by name: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" class="btn btn-blue btn-effect"  style="width: 70px; height: 40px; padding: 0px 0px 0px 0px; border-radius: 5px;">
+        </p>
+    </div>
+}
+
+@if (ViewBag.NoMatch != null || TempData["wrongId"] != null)
+{
+    <p class="no-match">@TempData["wrongId"]</p>
+    <p class="no-match">@ViewBag.NoMatch</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Username", "Index",
+               new { sortOrder = ViewBag.NameSortParam, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("First name", "Index",
+               new { sortOrder = ViewBag.FirstNameParam ,currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Last name", "Index",
+               new { sortOrder = ViewBag.LastNameParam, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Date Created", "Index", 
+               new { sortOrder = ViewBag.DateSortParam, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(HttpUtility.HtmlDecode(@Html.DisplayFor(modelItem => item.Username).ToString()), "Details", new { id = item.UserId })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+            </tr>
+        }
+    </table>
+}
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentFilter, currentFilter = ViewBag.CurrentFilter }))
+

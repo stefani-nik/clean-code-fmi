@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+
+<div id="g">
+    <div class="container">
+        <div class="row">
+            <p class="page-title">ABOUT US</p>
+            <br>
+            <br>
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8">
+                <p>We are determined to create a website which will be useful and entertaining. Our team has worked really hard on this project and has put a lot ot effort into making it happen. We hope that you like our blog and find it interesting.</p>
+                <br>
+                <br>
+            </div>
+            <div class="col-lg-2"></div>
+            <div class="col-lg-4 team" style="text-align: center">
+                <img class="img-circle" src="../../img/dobromir.jpg" height="90" width="90" style="margin: 0 auto;">
+                <h4>Dobromir Stefanov</h4>
+                <h5><i>Project Manager</i></h5>
+                <p>Dobromir is currently a student in Technical University in Sofia. He is planning to become a great programmer</p>
+               
+            </div>
+
+            <div class="col-lg-4 team" style="text-align: center">
+                <img class="img-circle" src="../../img/niki.jpg" height="90" width="90" style="margin: 0 auto;">
+                <h4>Nikolay Rogchev</h4>
+                <h5><i>Project Manager</i></h5>
+                <p>Nikolay is a senior-manager in SAP Bulgaria. He loves sports and beer.</p>
+              
+            </div>
+
+            <div class="col-lg-4 team" style="text-align: center">
+                <img class="img-circle" src="../../img/stefi.jpg" height="90" width="90" style="margin: 0 auto;">
+                <h4>Stefani Nikolova</h4>
+                <h5><i>Project Manager</i></h5>
+                <p>Stefani is a student in Sofia University. She is a little bit lazy but cool.</p>
+            </div>
+        </div>
+    </div><!-- /container -->
+</div>
+<div class="google-maps" style="border-radius: 5px;">
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEl9NbnlIbdROjZW9P78K1IVOhzY00Az0&sensor=false">
+    </script>
+   
+
+        <script type="text/javascript">
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success);
+        } else {
+            alert("Geo Location is not supported on your current browser!");
+        }
+        function success(position) {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            var city = position.coords.locality;
+            var myLatlng = new google.maps.LatLng(lat, long);
+            var myOptions = {
+                center: myLatlng,
+                zoom: 12,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                title: "lat: " + lat + " long: " + long
+            });
+            marker.setMap(map);
+            var infowindow = new google.maps.InfoWindow({ content: "<b>Our Address</b><br/> Latitude:" + lat + "<br /> Longitude:" + long + "" });
+            infowindow.open(map, marker);
+        }
+            </script>
+        <form id="form1" runat="server">
+            <div id="map_canvas" style="width: 100%; height: 400px; padding-top: 50px"></div>
+        </form>
+    </div>
