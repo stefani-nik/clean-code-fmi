@@ -1,1 +1,0 @@
-Small Project for University Course
